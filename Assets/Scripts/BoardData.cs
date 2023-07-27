@@ -24,7 +24,7 @@ public class BoardData : MonoBehaviour
     }
     private void Start()
     {
-        NewGame();   
+        UIController.onStartGame += NewGame;
     }
 
     private void NewGame()
@@ -160,8 +160,7 @@ public class BoardData : MonoBehaviour
         board.Draw(state);
     }
     private void Explode(Cell cell)
-    {
-        Debug.Log("GameOver");
+    {      
         gameOver = true;
 
         cell.revealed = true;
@@ -180,6 +179,7 @@ public class BoardData : MonoBehaviour
                 }
             }
         }
+        UIController.instance.LoseState();
     }
     private void Flood(Cell cell)
     {
@@ -240,7 +240,6 @@ public class BoardData : MonoBehaviour
                 }
             }
         }
-        Debug.Log("Win");
         gameOver = true;
         for (int x = 0; x < width; x++)
         {
@@ -254,5 +253,10 @@ public class BoardData : MonoBehaviour
                 }
             }
         }
+        UIController.instance.WinState();
+    }
+    private void OnDisable()
+    {
+        UIController.onStartGame -= NewGame;
     }
 }
